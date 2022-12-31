@@ -68,6 +68,7 @@ async def root(food):
           "sugars_grams": item_info["sugar_g"],
           "proteins_grams": item_info["protein_g"],
           "potassium_milligrams": item_info["potassium_mg"],
+          "serving_size_grams": item_info["serving_size_g"]
         },
         "recipes":recipe_list
 
