@@ -71,6 +71,13 @@
     width: 50%;
     display: grid;
     gap: 0.5rem;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 3;
 }
 
 .groups {

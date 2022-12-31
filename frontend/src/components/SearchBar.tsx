@@ -7,7 +7,7 @@ import styles from './Search.module.css';
 import SearchResult from './SearchResult';
 
 interface SearchBarProps {
-    callback: (info: FoodGeneralInfo) => void;
+    callback: (info: FoodGeneralInfo | undefined) => void;
 }
 
 interface SearchOptions {
@@ -43,7 +43,9 @@ export default function SearchBar(props: SearchBarProps) {
     });
 
     return (
-        <div class={styles.shadow}>
+        <>
+            <div class={styles.shadow} onClick={ e => props.callback(undefined) }></div>
+            
             <div class={styles.content}>
                 <input type="search" class={styles.searchEntry + " " + styles.searchBox} placeholder="Search foods..." onInput={ e => {
                     setOptions({ ...options, query: e.currentTarget.value });
@@ -64,6 +66,6 @@ export default function SearchBar(props: SearchBarProps) {
                     </For>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

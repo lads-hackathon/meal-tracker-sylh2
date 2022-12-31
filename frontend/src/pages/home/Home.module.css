@@ -1,0 +1,4 @@
+.mealGrid {
+    display: grid;
+    gap: 2rem;
+}

@@ -1,0 +1,13 @@
+.mealBox {
+    border-radius: 1rem;
+    border: #999999 4px solid;
+    border-style: dashed;
+    color: #999999;
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.mealBox:hover {
+    cursor: pointer;
+}
