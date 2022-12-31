@@ -9,7 +9,13 @@ with open('foods.json', 'rt') as data:
     foods: list[dict] = json.load(data)
 
 KEY = sys.argv[1]
-ALL_FOOD_GROUPS = ['Gourds', 'Herbs and spices', 'Snack foods', 'Milk and milk products', 'Animal foods', 'Eggs', 'Confectioneries', 'Unclassified', 'Coffee and coffee products', 'Soy', 'Herbs and Spices', 'Beverages', 'Fruits', 'Cocoa and cocoa products', 'Aquatic foods', 'Baking goods', 'Teas', 'Vegetables', 'Nuts', 'Pulses', 'Cereals and cereal products', 'Dishes', 'Fats and oils', 'Baby foods']
+ALL_FOOD_GROUPS = []
+
+for food in foods:
+    if food["food_group"] not in ALL_FOOD_GROUPS and food["food_group"]: # make sure the group isn't already present and is not none or empty
+        ALL_FOOD_GROUPS.append(food['food_group'])
+
+ALL_FOOD_GROUPS.sort()
 
 @app.get("/")
 async def root(food):
@@ -51,7 +57,7 @@ def get_food_groups():
     return ALL_FOOD_GROUPS
 
 @app.get('/search')
-def search_foods(query, limit: int, groups=','.join(ALL_FOOD_GROUPS)):
+def search_foods(query, limit: int, groups):
     top_matches = []
     good_matches = []
     next_matches = []
@@ -67,7 +73,7 @@ def search_foods(query, limit: int, groups=','.join(ALL_FOOD_GROUPS)):
             "image": f"https://foodb.ca/system/foods/pictures/{food['id']}/full/{food['id']}.png",
         }
 
-        if not food['group'] in filter_groups:
+        if food['group'] not in filter_groups:
             continue
 
         if food['name'].lower() == query.lower():
