@@ -62,8 +62,8 @@ async def root(food):
     
     f_dict = { # conversion to schema
         "name":item_info["name"],
+        "info": more_info,
         "nutrition": {
-          "info": more_info,
           "calories": item_info["calories"],
           "total_fat_grams": item_info["fat_total_g"],
           "saturated_fat_grams": item_info["fat_saturated_g"],
