@@ -18,7 +18,7 @@ interface SearchOptions {
 const fetchSearchResults = async (query: SearchOptions) => apiCall(`/search?query=${query.query}&groups=${query.groups.join(',')}&limit=150`);
 
 export default function SearchBar(props: SearchBarProps) {
-    const [ options, setOptions ] = createStore<SearchBarProps>({
+    const [ options, setOptions ] = createStore<SearchOptions>({
         query: '',
         groups: []
     });
