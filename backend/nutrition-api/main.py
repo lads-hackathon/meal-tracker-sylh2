@@ -1,10 +1,13 @@
 import requests, json, uvicorn, sys, sqlite3
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 
 
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=['*'])
+
 with open('foods.json', 'rt') as data:
     foods: list[dict] = json.load(data)
 
@@ -93,4 +96,4 @@ def search_foods(query, limit: int, groups):
 
     return all
 
-uvicorn.run(app, reload=False)
+uvicorn.run(app, reload=False, host='0.0.0.0')
