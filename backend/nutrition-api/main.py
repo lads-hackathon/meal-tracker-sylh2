@@ -51,7 +51,7 @@ def get_food_groups():
     return ALL_FOOD_GROUPS
 
 @app.get('/search')
-def search_foods(query, groups=','.join(ALL_FOOD_GROUPS)):
+def search_foods(query, limit: int, groups=','.join(ALL_FOOD_GROUPS)):
     top_matches = []
     good_matches = []
     next_matches = []
@@ -77,7 +77,7 @@ def search_foods(query, groups=','.join(ALL_FOOD_GROUPS)):
         elif query.lower() in food['name'].lower():
             next_matches.append(food)
         
-        if len(top_matches) + len(good_matches) + len(next_matches) > 10:
+        if len(top_matches) + len(good_matches) + len(next_matches) > limit:
             break
     
     all = []
