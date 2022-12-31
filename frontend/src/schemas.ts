@@ -16,7 +16,16 @@ export interface NutritionFacts {
     proteins_grams: number;
 }
 
+export interface FoodGeneralInfo {
+    name: string;
+    group: string;
+    subgroup: string;
+    description: string;
+    image: string;
+}
+
 export interface FoodNutritionFacts {
     name: string;
+    info: FoodGeneralInfo;
     nutrition: NutritionFacts;
 }

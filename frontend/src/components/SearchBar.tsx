@@ -1,29 +1,68 @@
-import { Accessor, createResource, createSignal, For } from 'solid-js';
-import { searchForWorkspaceRoot } from 'vite';
+import { createEffect, createResource, createSignal, For, Show } from 'solid-js';
+import { createStore } from "solid-js/store";
 import { apiCall } from '../api';
-import { FoodNutritionFacts } from '../schemas';
-import styles from './SearchBar.module.css';
+import { FoodGeneralInfo } from '../schemas';
+import GroupChip from './GroupChip';
+import styles from './Search.module.css';
+import SearchResult from './SearchResult';
 
 interface SearchBarProps {
-    
+    callback: (info: FoodGeneralInfo) => void;
 }
 
-const fetchSearchResults = async (query) => apiCall(`/search?q=${query}`);
+interface SearchOptions {
+    query: string;
+    groups: string[];
+}
+
+const fetchSearchResults = async (query: SearchOptions) => apiCall(`/search?query=${query.query}&groups=${query.groups.join(',')}&limit=150`);
 
 export default function SearchBar(props: SearchBarProps) {
-    const [ query, setQuery ] = createSignal<string>();
-    const [ results ] = createResource(query, fetchSearchResults);
+    const [ options, setOptions ] = createStore<SearchBarProps>({
+        query: '',
+        groups: []
+    });
+    const [ results, { refetch, mutate } ] = createResource(options, fetchSearchResults);
+    const [ groups ] = createResource(async () => apiCall('/groups'));
+    const [ toggledGroups, setToggledGroups ] = createStore<string[]>([]);
+
+    createEffect(() => {
+        if (toggledGroups.length == 0) {
+            setOptions({
+                ...options,
+                groups: groups()
+            });
+        } else {
+            setOptions({
+                ...options,
+                groups: toggledGroups
+            });
+        }
+
+        refetch();
+    });
 
     return (
         <div class={styles.shadow}>
-            <input type="search" class={styles.search} placeholder="Search foods..." onInput={ e => setQuery(e.currentTarget.value) } />
+            <div class={styles.content}>
+                <input type="search" class={styles.searchEntry + " " + styles.searchBox} placeholder="Search foods..." onInput={ e => {
+                    setOptions({ ...options, query: e.currentTarget.value });
+                    refetch();
+                } } />
+                
+                <div class={styles.groups}>
+                    <For each={ groups() }>
+                        { (result: string, i) => (
+                            <GroupChip group={result} setGroups={setToggledGroups} getGroups={toggledGroups} />
+                        ) }
+                    </For>
+                </div>
 
-            <div>
-                <For each={ results() }>
-                    { (result: FoodNutritionFacts, i) => (
-                        <h1 class={styles.autocompleteEntry}>{result.name}</h1>
-                    ) }
-                </For>
+                <div class={styles.autocompleteResults}>
+                    <For each={ results() }>
+                        { (result: FoodGeneralInfo, i) => <SearchResult info={result} onClick={ e => props.callback(result) } /> }
+                    </For>
+                </div>
             </div>
         </div>
     )

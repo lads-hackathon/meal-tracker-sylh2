@@ -1,7 +1,7 @@
 import { useParams } from "@solidjs/router"
 import { createResource, Show } from "solid-js";
-import { apiCall } from "../api";
-import NutritionFactsTable from '../components/NutritionFactsTable'
+import { apiCall } from "../../api";
+import NutritionFactsTable from '../../components/NutritionFactsTable'
 
 export default function ItemPage() {
     const params = useParams();

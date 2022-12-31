@@ -1,0 +1,17 @@
+.chip {
+    background: #ffffff;
+    padding: 0.25rem;
+    border-radius: var(--border-radius);
+    border: 0;
+    transition: background 0.15s linear;
+    font-size: 1em;
+}
+
+.chip:hover {
+    cursor: pointer;
+    background: #bdd8ff;
+}
+
+.chip.chipToggled {
+    background: #7bb2ff;
+}
