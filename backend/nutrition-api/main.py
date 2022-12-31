@@ -1,8 +1,6 @@
-import requests, json, uvicorn, sys, sqlite3
+import requests, json, uvicorn, sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-
 
 
 app = FastAPI()
@@ -35,10 +33,8 @@ async def root(food):
 
     info_obj = json.loads(response.text)
     item_info = info_obj["items"][0]
-    more_info = search_foods(food)[0]
     f_dict = { # conversion to schema
         "name":item_info["name"],
-        "info": more_info,
         "nutrition": {
           "calories": item_info["calories"],
           "total_fat_grams": item_info["fat_total_g"],
