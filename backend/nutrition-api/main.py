@@ -1,6 +1,7 @@
 import requests, json, uvicorn, sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.exceptions import HTTPException
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'])
@@ -20,6 +21,10 @@ ALL_FOOD_GROUPS.sort()
 
 @app.get("/")
 async def root(food):
+    try: more_info = search_foods(food, 1, ",".join(ALL_FOOD_GROUPS))[0]
+    except IndexError:
+        raise HTTPException(status_code=404, detail={"message": "food not found"})
+
     url = "https://calorieninjas.p.rapidapi.com/v1/nutrition"
     querystring = {"query":food}
     headers = {
@@ -36,14 +41,14 @@ async def root(food):
     }
     e_res = requests.request("GET", url, headers=headers, params=querystring)
 
-
-    
     recipe_obj = json.loads(e_res.text)
     recipe_hits = recipe_obj["hits"]
     recipe_list = []
-    
+
     info_obj = json.loads(cn_res.text)
-    item_info = info_obj["items"][0]
+    try: item_info = info_obj["items"][0]
+    except IndexError:
+        raise HTTPException(status_code=404, detail={"message": "food not found"})
     
     for i in range(3):
         try: current_hit = recipe_hits[i]["recipe"]
@@ -58,6 +63,7 @@ async def root(food):
     f_dict = { # conversion to schema
         "name":item_info["name"],
         "nutrition": {
+          "info": more_info,
           "calories": item_info["calories"],
           "total_fat_grams": item_info["fat_total_g"],
           "saturated_fat_grams": item_info["fat_saturated_g"],
