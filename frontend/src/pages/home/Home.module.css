@@ -2,3 +2,12 @@
     display: grid;
     gap: 2rem;
 }
+
+.infoGrid {
+    display: grid;
+    gap: 1rem;
+}
+
+.subtitle {
+    text-align: center;
+}

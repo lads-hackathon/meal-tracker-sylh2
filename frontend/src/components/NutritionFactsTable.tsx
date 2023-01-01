@@ -11,6 +11,11 @@ export default function NutritionFactsTable(props: FoodNutritionFacts) {
                 <h2>Calories</h2>
                 <h2>{props.nutrition.calories}</h2>
             </div>
+
+            <div>
+                <p>Total Fat {props.nutrition.total_fat_grams}g</p>
+                <p>Saturated</p>
+            </div>
         </div>
     )
 }

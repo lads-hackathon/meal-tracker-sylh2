@@ -2,16 +2,18 @@ import { useParams } from "@solidjs/router"
 import { createResource, Show } from "solid-js";
 import { apiCall } from "../../api";
 import NutritionFactsTable from '../../components/NutritionFactsTable'
+import { FoodNutritionFacts } from "../../schemas";
+
 
 export default function ItemPage() {
     const params = useParams();
-    const [ foodData ] = createResource(async () => await apiCall(`/item/${params.id}`))
+    
 
     return (
         <div>
-            <Show when={ !foodData.loading } fallback={ <h1>Loading</h1> }>
-                <NutritionFactsTable {...foodData()} />
-            </Show>
+            <h1> hello </h1>
+{/* 
+            <NutritionFactsTable {...props.food} /> */}
         </div>
     )
 }

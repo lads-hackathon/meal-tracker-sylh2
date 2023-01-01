@@ -1,13 +1,14 @@
-import { createEffect, createResource, createSignal, For, Show } from 'solid-js';
+import { createEffect, createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { createStore } from "solid-js/store";
 import { apiCall } from '../api';
-import { FoodGeneralInfo } from '../schemas';
+import { ChevronLeftIcon, SearchIcon } from '../icons';
+import { FoodGeneralInfo, FoodNutritionFacts } from '../schemas';
 import GroupChip from './GroupChip';
 import styles from './Search.module.css';
 import SearchResult from './SearchResult';
 
 interface SearchBarProps {
-    callback: (info: FoodGeneralInfo | undefined) => void;
+    callback: (info: FoodNutritionFacts | undefined) => void;
 }
 
 interface SearchOptions {
@@ -15,7 +16,8 @@ interface SearchOptions {
     groups: string[];
 }
 
-const fetchSearchResults = async (query: SearchOptions) => apiCall(`/search?query=${query.query}&groups=${query.groups.join(',')}&limit=150`);
+const fetchSearchResults = async (query: SearchOptions) => apiCall(`/search?query=${query.query}&groups=${query.groups.join(',')}&limit=25`);
+const fetchFullData = async (query: string) => apiCall(`/?food=${query}`);
 
 export default function SearchBar(props: SearchBarProps) {
     const [ options, setOptions ] = createStore<SearchOptions>({
@@ -23,8 +25,11 @@ export default function SearchBar(props: SearchBarProps) {
         groups: []
     });
     const [ results, { refetch, mutate } ] = createResource(options, fetchSearchResults);
+    const [ fullData, setFullData ] = createStore(undefined);
     const [ groups ] = createResource(async () => apiCall('/groups'));
     const [ toggledGroups, setToggledGroups ] = createStore<string[]>([]);
+    const [ loading, setLoading ] = createSignal(false);
+    let searchBox;
 
     createEffect(() => {
         if (toggledGroups.length == 0) {
@@ -42,15 +47,64 @@ export default function SearchBar(props: SearchBarProps) {
         refetch();
     });
 
+    const escapeKeyHandler = e => {
+        if (e.key == 'Escape') {
+            props.callback(undefined);
+        }
+    };
+
+    const callbackWithDataHandler = async (food: FoodGeneralInfo) => {
+        setLoading(true);
+
+        let data = await fetchFullData(food.name);
+
+        setFullData(data);
+
+        if (!data['detail']) {
+            props.callback(data);
+        }
+
+        setLoading(false);
+    }
+
+    document.addEventListener('keydown', escapeKeyHandler);
+
+    onMount(() => {
+        searchBox.focus();
+    });
+
+    onCleanup(() => {
+        document.removeEventListener('keydown', escapeKeyHandler);
+    });
+
     return (
         <>
             <div class={styles.shadow} onClick={ e => props.callback(undefined) }></div>
-            
+
             <div class={styles.content}>
-                <input type="search" class={styles.searchEntry + " " + styles.searchBox} placeholder="Search foods..." onInput={ e => {
-                    setOptions({ ...options, query: e.currentTarget.value });
-                    refetch();
-                } } />
+
+                <div class={styles.fullSearchBar}>
+                    <div onClick={ e => props.callback(undefined) } class={styles.backButton}>
+                        <ChevronLeftIcon />
+                    </div>
+
+                    <div class={styles.connectedSearchBar}>
+                        <SearchIcon />
+
+                        <input type="search" class={styles.searchEntry + " " + styles.searchBox} placeholder="Search foods..." onInput={ e => {
+                            setOptions({ ...options, query: e.currentTarget.value });
+                            refetch();
+                        } } ref={searchBox} />
+                    </div>
+                </div>
+
+                <Show when={fullData && fullData['detail']}>
+                    <p class={`${styles.error} ${styles.messageBox}`}>Error: {fullData['detail']['message']}</p>
+                </Show>
+
+                <Show when={loading()}>
+                    <p class={`${styles.messageBox}`}>Loading...</p>
+                </Show>
                 
                 <div class={styles.groups}>
                     <For each={ groups() }>
@@ -62,7 +116,7 @@ export default function SearchBar(props: SearchBarProps) {
 
                 <div class={styles.autocompleteResults}>
                     <For each={ results() }>
-                        { (result: FoodGeneralInfo, i) => <SearchResult info={result} onClick={ e => props.callback(result) } /> }
+                        { (result: FoodGeneralInfo, i) => <SearchResult info={result} onClick={ () => callbackWithDataHandler(result) } /> }
                     </For>
                 </div>
             </div>

@@ -1,3 +1,34 @@
+:root {
+    --primary: #ffffff;
+    --light: #dddddd;
+    --light-darker: #999999;
+    --opposite: #000000; 
+    
+    --selection: #bdd8ff;
+    --selection-dark: #7bb2ff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary: #171717;
+        --light: #282828;
+        --light-darker: #0f0f0f;
+        --opposite: #eeeeee;
+
+        --selection: #266fd5;
+        --selection-dark: #0d3266;
+    }
+}
+
 * {
     font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    background: var(--primary);
+    color: var(--opposite);
+}
+
+h1 {
+    text-align: center;
 }

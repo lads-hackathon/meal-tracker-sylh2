@@ -1,5 +1,5 @@
 .chip {
-    background: #ffffff;
+    background: var(--primary);
     padding: 0.25rem;
     border-radius: var(--border-radius);
     border: 0;
@@ -9,9 +9,9 @@
 
 .chip:hover {
     cursor: pointer;
-    background: #bdd8ff;
+    background: var(--selection);
 }
 
 .chip.chipToggled {
-    background: #7bb2ff;
+    background: var(--selection-dark);
 }

@@ -8,6 +8,31 @@
     text-align: center;
 }
 
-.mealBox:hover {
+.food {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+    padding: 1rem;
+}
+
+.mealBox.notEmpty {
+    border-style: solid;
+}
+
+.addToMeal {
+    background: transparent;
+    font-size: 1.25em;
+    color: #999999;
+    font-weight: bold;
+    border: 0;
     cursor: pointer;
+    width: 100%;
+    margin: 1rem 0 1rem 0;
+}
+
+@media only screen and (max-width: 750px) {
+    .food {
+        display: flex;
+        flex-direction: column;
+    }
 }
