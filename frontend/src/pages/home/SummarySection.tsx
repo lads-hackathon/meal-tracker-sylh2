@@ -20,15 +20,16 @@ export default function SummarySection(props: SummarySectionProps) {
             meal.foods.forEach( (element) => {
                 switch (props.title) {
                     case 'Calories':
-                        totalBuffer += element.nutrition.calories;
+                        console.log(element.nutrition.serving_size_grams);
+                        totalBuffer += (element.nutrition.calories * (element.nutrition.serving_size_grams / 100));
                         break;
 
                     case 'Carbohydrates':
-                        totalBuffer += element.nutrition.total_carb_grams;
+                        totalBuffer += (element.nutrition.total_carb_grams * (element.nutrition.serving_size_grams / 100));
                         break;
 
                     case 'Fats':
-                        totalBuffer += element.nutrition.total_fat_grams;
+                        totalBuffer += (element.nutrition.total_fat_grams * (element.nutrition.serving_size_grams / 100));
                         break;
                 }
             });
@@ -51,8 +52,10 @@ export default function SummarySection(props: SummarySectionProps) {
                 (props.body.gender == 'Male') ? recBuffer += 5 : recBuffer -= 161;
                 break;
             case 'Carbohydrates':
+                recBuffer = 250;
                 break;
             case 'Fats':
+                recBuffer = 60;
                 break;
         };
 
@@ -66,11 +69,11 @@ export default function SummarySection(props: SummarySectionProps) {
             <div class={styles.subSection}>
                 <div>
                     <h3>Total</h3>
-                    <p>{Math.round(total() * 10) / 10}</p>
+                    <p>{ (Math.round(total() * 10) / 10) + ((props.title == 'Calories') ? '' : ' g')}</p>
                 </div>
                 <div>
                     <h3>Recommended</h3>
-                    <p>{Math.round(rec() * 10) / 10}</p>
+                    <p>{Math.round(rec() * 10) / 10 + ((props.title == 'Calories') ? '' : ' g')}</p>
                 </div>    
             </div>
         </div>

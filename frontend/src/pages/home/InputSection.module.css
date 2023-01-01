@@ -1,0 +1,13 @@
+.inputField {
+    border: 1px solid gray;
+    border-radius: 100px;
+    padding: 0.5rem;
+    text-align: center;
+    margin: 0.5rem;
+}
+
+.inputGrid {
+    display: grid;
+    margin-left: 2rem;
+    align-items: center;
+}
