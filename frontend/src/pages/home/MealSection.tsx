@@ -1,10 +1,13 @@
-import { For, Show } from 'solid-js';
+import { Accessor, For, Show } from 'solid-js';
+import { SetStoreFunction } from 'solid-js/store';
 import { FoodNutritionFacts, Meal } from '../../schemas';
 import FoodEntry from './FoodEntry';
 import styles from './MealSection.module.css';
 
 interface MealSectionProps {
     meal: Meal;
+    deleteItem: (i: Accessor<number>, mealName: string) => void;
+    showInfoBox: (food: FoodNutritionFacts) => void;
     onClick: (element: HTMLDivElement) => void;
 }
 
@@ -22,7 +25,7 @@ export default function MealSection(props: MealSectionProps) {
                 <div class={styles.food}>
                     <For each={ props.meal.foods }>
                         { (item: FoodNutritionFacts, i) => (
-                            <FoodEntry item={item} />
+                            <FoodEntry item={item} deleteCallback={ () => props.deleteItem(i, props.meal.name) } showInfoBox={ props.showInfoBox } index={i} meal={ props.meal } />
                         ) }
                     </For>
                 </div>

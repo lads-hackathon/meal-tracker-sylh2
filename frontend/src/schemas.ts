@@ -29,6 +29,7 @@ export interface FoodNutritionFacts {
     name: string;
     info: FoodGeneralInfo;
     nutrition: NutritionFacts;
+    recipes: Recipe[];
 }
 
 export interface Meal {

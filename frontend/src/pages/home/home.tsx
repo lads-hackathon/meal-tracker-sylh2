@@ -39,8 +39,6 @@ export default function Home() {
 		}
 	]);
 
-	createEffect(() => console.log(setMeals));
-
 	const [ searching, setSearching ] = createSignal<Meal>();
 	const [ infoBoxFood, setInfoBoxFood ] = createSignal<FoodNutritionFacts | undefined>(undefined);
 	const [ info ] = createStore(['Calories', 'Carbohydrates', 'Fats']);
@@ -77,8 +75,6 @@ export default function Home() {
 				let newFoodList = [];
 
 				for (let i = 0; foods.length > i; i++) {
-					console.log(i);
-					
 					if (i == index()) continue;
 					newFoodList.push(foods[i]);
 				}
@@ -86,28 +82,6 @@ export default function Home() {
 				return newFoodList;
 			}
 		);
-	}
-
-	const setServingSizeForFood = (meal: string, foodIndex: Accessor<number>, servSize: number) => {
-		console.log(meal, foodIndex(), servSize);
-
-		setMeals(
-			m => m.name == meal,
-			"foods",
-			(foods: FoodNutritionFacts[]) => {
-				let newFoodList: FoodNutritionFacts[] = [];
-
-				for (let food of foods) {
-					newFoodList.push(food);
-				}
-
-                foods[foodIndex()].nutrition.serving_size_grams = servSize;
-
-				return newFoodList;
-			}
-		);
-
-		console.log(meals)
 	}
 
 	const [ mealName, setMealName ] = createSignal<string>();
@@ -138,7 +112,7 @@ export default function Home() {
 			<section class={styles.mealGrid}>
 				<For each={ meals }>
 					{ ( meal: Meal, i ) => (
-						<MealSection meal={meal} onClick={ e => setSearching(meal) } deleteItem={deleteFoodFromMeal} showInfoBox={ food => setInfoBoxFood(food) } setServSize={ setServingSizeForFood } />
+						<MealSection meal={meal} onClick={ e => setSearching(meal) } deleteItem={deleteFoodFromMeal} showInfoBox={ food => setInfoBoxFood(food) } />
 					) }
 				</For>
 

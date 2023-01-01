@@ -11,3 +11,22 @@
 .subtitle {
     text-align: center;
 }
+
+.bottomSection {
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    align-items: center;
+}
+
+.inputField {
+    border: 1px solid gray;
+    border-radius: 100px;
+    padding: 0.5rem;
+    text-align: center;
+    margin: 0.5rem;
+}
+
+.addSection {
+    align-items: center;
+    text-align: center;
+}

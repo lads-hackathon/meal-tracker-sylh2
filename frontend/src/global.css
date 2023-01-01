@@ -27,6 +27,7 @@
 body {
     background: var(--primary);
     color: var(--opposite);
+    padding-bottom: 5rem;
 }
 
 h1 {

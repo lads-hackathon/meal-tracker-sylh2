@@ -1,0 +1,53 @@
+.shadow {
+    width: 100vw;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+
+    z-index: 1;
+    backdrop-filter: blur(4px);
+}
+
+.content {
+    width: 50%;
+    height: 80%;
+    display: grid;
+    gap: 0.5rem;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 3;
+
+    color: var(--opposite);
+    background: var(--primary);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+
+    font-size: 1.25em;
+}
+
+.info {
+    overflow-y: auto;
+}
+
+.recipes {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+}
+
+.bar {
+    display: flex;
+    align-items: center;
+}
+
+.bar h1 {
+    width: calc(100% - 42px * 2);
+    text-align: center;
+}

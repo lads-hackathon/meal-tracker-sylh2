@@ -20,7 +20,6 @@ export default function SummarySection(props: SummarySectionProps) {
             meal.foods.forEach( (element) => {
                 switch (props.title) {
                     case 'Calories':
-                        console.log(element.nutrition.serving_size_grams);
                         totalBuffer += (element.nutrition.calories * (element.nutrition.serving_size_grams / 100));
                         break;
 
@@ -73,7 +72,7 @@ export default function SummarySection(props: SummarySectionProps) {
                 </div>
                 <div>
                     <h3>Recommended</h3>
-                    <p>{Math.round(rec() * 10) / 10 + ((props.title == 'Calories') ? '' : ' g')}</p>
+                    <p>{ (Math.round(rec() * 10) / 10) + ((props.title == 'Calories') ? '' : ' g')}</p>
                 </div>    
             </div>
         </div>

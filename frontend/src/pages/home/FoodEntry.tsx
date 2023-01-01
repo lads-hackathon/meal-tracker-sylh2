@@ -1,11 +1,16 @@
-import { Link } from "@solidjs/router";
-import { ChevronRightIcon, InfoIcon, TrashIcon } from "../../icons";
-import { FoodNutritionFacts } from "../../schemas";
+import { Accessor, createEffect, createSignal } from "solid-js";
+import { SetStoreFunction } from "solid-js/store";
+import { InfoIcon, TrashIcon } from "../../icons";
+import { FoodNutritionFacts, Meal } from "../../schemas";
 
 import styles from './FoodEntry.module.css';
 
 interface FoodEntryProps {
     item: FoodNutritionFacts;
+    meal: Meal;
+    showInfoBox: (food: FoodNutritionFacts) => void;
+    deleteCallback: () => void;
+    index: Accessor<number>;
 }
 
 export default function FoodEntry(props: FoodEntryProps) {
@@ -15,11 +20,11 @@ export default function FoodEntry(props: FoodEntryProps) {
 
             <div class={styles.resultText}>
                 <h3>{props.item.name.charAt(0).toUpperCase() + props.item.name.slice(1)} ({props.item.info.group})</h3>
-                <p>Serv. size {props.item.nutrition.serving_size_grams}g / Cals {props.item.nutrition.calories} </p>
+                <p>Serving size: {props.item.nutrition.serving_size_grams}g</p>
 
                 <div class={styles.icons}>
-                    <InfoIcon />
-                    <TrashIcon />
+                    <InfoIcon onClick={ () => props.showInfoBox(props.item) } style="cursor: pointer;" />
+                    <TrashIcon onClick={ props.deleteCallback } style="cursor: pointer;" />
                 </div>
             </div>
         </div>
